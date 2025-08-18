@@ -4,7 +4,7 @@
 </p>
 <p align="center">
 <img src="https://img.shields.io/badge/made%20by-CSSSensei,%20MaxMavr-439900">
-<img src="https://img.shields.io/badge/Phasalopedia-84D300">
+<a href="https://github.com/Phasalo"><img src="https://img.shields.io/badge/Phasalopedia-84D300"></a>
 <img src="https://img.shields.io/badge/version-if%20n%20==%202-D1F24E">
 </p>
 
