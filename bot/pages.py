@@ -41,9 +41,15 @@ async def user_query(user_id: int, user_id_to_find: Optional[int], page: int = 1
 
         user = users_db.get_user(user_id_to_find)
 
+        username_display = (
+            f'@{user.username}' if user and user.username
+            else user.first_name if user
+            else None
+        )
+
         txt = format_list.format_queries_text(
             queries=queries,
-            name=user.username or user.first_name if user else None,
+            name=username_display,
             user_id=user_id_to_find,
             footnote_template=PHRASES_RU.footnote.user_query,
             line_template=PHRASES_RU.template.user_query

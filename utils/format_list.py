@@ -11,7 +11,7 @@ def format_user_list(users_info: List[UserModel], pagination: Pagination) -> str
 
     for user in users_info:
         line_data = {
-            'username': user.username or PHRASES_RU.icon.not_username,
+            'username': f'@{user.username}' if user.username else user.first_name or PHRASES_RU.icon.not_username,
             'user_id': str(user.user_id).ljust(12),
             'query_stat': f'{format_string.get_query_count_emoji(user.query_count)} {user.query_count}',
             'registration_date': user.registration_date.strftime('%d.%m.%Y')
@@ -61,7 +61,7 @@ def format_queries_text(
             'user_id': query.user.user_id,
             'time': query.query_date.strftime('%d.%m.%Y %H:%M:%S') if query.query_date else PHRASES_RU.error.unknown,
             'query': query.query_text,
-            'username': (query.user.username or query.user.first_name or '') if query.user else ''
+            'username': f'@{query.user.username}' if query.user and query.user.username else query.user.first_name if query.user else ''
         }
         txt.append(line_template.format(**line_data))
 
