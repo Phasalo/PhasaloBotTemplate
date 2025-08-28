@@ -22,7 +22,9 @@ async def _(message: Message):
 
 @router.command('about', 'о разработчиках')  # /about
 async def _(message: Message):
-    await message.answer(PHRASES_RU.commands.about, disable_web_page_preview=True)
+    await message.answer_photo(caption=PHRASES_RU.commands.about,
+                               photo='https://yan-toples.ru/Phasalo/color-black-phasalo-project-margin.png',
+                               disable_web_page_preview=True)
 
 
 @router.command(('commands', 'cmds'), 'список всех команд (это сообщение)')  # /commands /cmds
