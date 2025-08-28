@@ -2,7 +2,7 @@ commands:
   start: "Стартовое сообщение"
   help: "Помощь"
   about: |
-    Продакшн <b>Phasalopedia</b>
+    Продакшн <b><a href="https://t.me/phasalo">Phasalo</a></b>
     Дизайн <b><a href="https://t.me/kfprod">KFproduction</a></b>
 
     2025
