@@ -85,11 +85,11 @@ git remote -v
 ### Пользуйтесь!
 
 <p align="center">
-  <img src="https://yan-toples.ru/Phasalo/phasalopedia_logo.png" width="1500" alt="Phasalo">
+  <img width="1872" height="888" alt="Phasalo" src="https://github.com/user-attachments/assets/1e33d343-33cb-4682-a172-c654fbcd24a7" />
 </p>
 
 <p align="center">
-<b>Phasalopedia</b><br>
+<b>Phasalo</b><br>
 <i>Делаем красиво!</i><br><br>
 2025
 </p>
