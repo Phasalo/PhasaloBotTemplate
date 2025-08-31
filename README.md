@@ -49,11 +49,11 @@ upstream  # оригинал (только чтение)
 Если хотите получить свежие изменения
 ```bash
 git fetch upstream
-git merge upstream/main
+git merge upstream/master
 ```
 или для перезаписи всех изменений
 ```bash
-git reset --hard upstream/main
+git reset --hard upstream/master
 ```
 
 ### Пользуйтесь!
