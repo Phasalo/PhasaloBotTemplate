@@ -1,7 +1,8 @@
 from aiogram import Router
 from aiogram.types import CallbackQuery
-from bot.bot_utils.models import PageCallBack
+
 from bot import pages
+from bot.bot_utils.models import PageCallBack
 
 router = Router()
 

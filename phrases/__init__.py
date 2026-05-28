@@ -1,13 +1,13 @@
-import yaml
-from os.path import dirname
-from typing import Any, Dict
-from random import choice
 import re
+from os.path import dirname
+from random import choice
+from typing import Any
+
+import yaml
 
 
 class Phrases:
-    """Класс для представления"""
-    def __init__(self, dictionary: Dict[str, Any]):
+    def __init__(self, dictionary: dict[str, Any]):
         for key, value in dictionary.items():
             if isinstance(value, dict):
                 setattr(self, key, Phrases(value))
@@ -41,8 +41,8 @@ class Phrases:
         try:
             for part in parts:
                 current = getattr(current, part)
-        except AttributeError:
-            raise AttributeError(f'Фраза «{phrase_name}» не найдена')
+        except AttributeError as err:
+            raise AttributeError(f'Фраза «{phrase_name}» не найдена') from err
 
         if isinstance(current, list):
             phrase = choice(current)
@@ -58,7 +58,7 @@ class Phrases:
 
 
 def __load_phrases(phrases_path: str) -> Phrases:
-    with open(phrases_path, 'r', encoding='utf-8') as file:
+    with open(phrases_path, encoding='utf-8') as file:
         data = yaml.safe_load(file)
     return Phrases(data)
 

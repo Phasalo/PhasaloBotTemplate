@@ -1,22 +1,19 @@
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Optional
 
 
 @dataclass
 class UserModel:
-    """Класс для представления пользователя"""
     user_id: int
-    username: Optional[str] = None
-    first_name: Optional[str] = None
-    last_name: Optional[str] = None
+    username: str | None = None
+    first_name: str | None = None
+    last_name: str | None = None
     is_admin: bool = False
     is_banned: bool = False
-    registration_date: Optional[datetime] = None
+    registration_date: datetime | None = None
     query_count: int = 0
 
     def full_name(self) -> str:
-        """Возвращает полное имя пользователя"""
         parts = []
         if self.first_name:
             parts.append(self.first_name)
@@ -27,12 +24,11 @@ class UserModel:
 
 @dataclass
 class QueryModel:
-    """Класс для представления запроса"""
     user_id: int
     query_text: str
-    query_id: Optional[int] = None
-    query_date: Optional[datetime] = None
-    user: Optional[UserModel] = None
+    query_id: int | None = None
+    query_date: datetime | None = None
+    user: UserModel | None = None
 
 
 @dataclass

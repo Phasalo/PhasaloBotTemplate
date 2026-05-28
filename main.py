@@ -18,15 +18,14 @@
 #
 
 import asyncio
+import logging
+
 from aiogram import Dispatcher
 
+from bot.handlers import admin_router, callbacks_router, default_router, inline_router
+from bot.middlewares import GetUserMiddleware, ShadowBanMiddleware, UserLoggerMiddleware
 from config import bot
-from bot.middlewares.get_user import GetUserMiddleware
-from bot.middlewares.shadow_ban import ShadowBanMiddleware
-from bot.middlewares.logging_query import UserLoggerMiddleware
-from bot import handlers
 from DB import init_database
-import logging
 
 logger = logging.getLogger(__name__)
 
@@ -38,10 +37,10 @@ async def main() -> None:
     dp = Dispatcher()
 
     logger.info('Including routers')
-    dp.include_router(handlers.admin.router)
-    dp.include_router(handlers.default.router)
-    dp.include_router(handlers.callbacks.router)
-    dp.include_router(handlers.inline.router)
+    dp.include_router(admin_router)
+    dp.include_router(callbacks_router)
+    dp.include_router(default_router)
+    dp.include_router(inline_router)
 
     logger.info('Including middlewares')
     dp.update.middleware(GetUserMiddleware())
@@ -49,7 +48,9 @@ async def main() -> None:
     dp.message.middleware.register(UserLoggerMiddleware())
     dp.inline_query.middleware.register(UserLoggerMiddleware())
 
-    logger.info(f'{(await bot.get_me()).first_name} starting\n * Running on http://t.me/{(await bot.get_me()).username}')
+    logger.info(
+        f'{(await bot.get_me()).first_name} starting\n * Running on http://t.me/{(await bot.get_me()).username}'
+    )
     try:
         await dp.start_polling(bot)
     except Exception as e:

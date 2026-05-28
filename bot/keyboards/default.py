@@ -1,5 +1,6 @@
-from aiogram.utils.keyboard import ReplyKeyboardMarkup as KMarkup
 from aiogram.utils.keyboard import KeyboardButton as KButton
+from aiogram.utils.keyboard import ReplyKeyboardMarkup as KMarkup
+
 from phrases import PHRASES_RU
 
 
@@ -14,4 +15,5 @@ keyboard: KMarkup = KMarkup(
     keyboard=[[button_1], [button_2]],
     resize_keyboard=True,
     one_time_keyboard=False,
-    input_field_placeholder=__make_placeholder_appeal())
+    input_field_placeholder=__make_placeholder_appeal(),
+)

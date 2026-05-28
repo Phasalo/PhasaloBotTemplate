@@ -1,10 +1,11 @@
 from aiogram import F
-from DB.tables.users import UsersTable
-from bot import keyboards
-from bot.handlers.admin import command_getcmds
 from aiogram.types import Message
-from bot.bot_utils.routers import UserRouter, BaseRouter
+
+from bot import keyboards
+from bot.bot_utils.routers import BaseRouter, UserRouter
+from bot.handlers.admin import command_getcmds
 from config import config
+from DB.tables.users import UsersTable
 from phrases import PHRASES_RU
 
 router = UserRouter()
@@ -22,9 +23,11 @@ async def _(message: Message):
 
 @router.command('about', 'о разработчиках')  # /about
 async def _(message: Message):
-    await message.answer_photo(caption=PHRASES_RU.commands.about,
-                               photo='https://yan-toples.ru/Phasalo/color-black-phasalo-project-margin.png',
-                               disable_web_page_preview=True)
+    await message.answer_photo(
+        caption=PHRASES_RU.commands.about,
+        photo='https://yan-toples.ru/Phasalo/color-black-phasalo-project-margin.png',
+        disable_web_page_preview=True,
+    )
 
 
 @router.command(('commands', 'cmds'), 'список всех команд (это сообщение)')  # /commands /cmds

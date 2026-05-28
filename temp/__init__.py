@@ -1,12 +1,11 @@
 import logging
 from os import listdir, unlink
-from os.path import join, isfile, islink, isdir, dirname, abspath
-from typing import Optional
+from os.path import abspath, dirname, isdir, isfile, islink, join
 
 logger = logging.getLogger(__name__)
 
 
-def clear(temp_dir: Optional[str] = None) -> bool:
+def clear(temp_dir: str | None = None) -> bool:
     if not temp_dir:
         temp_dir = dirname(__file__)
 
@@ -23,7 +22,5 @@ def clear(temp_dir: Optional[str] = None) -> bool:
                 clear(file_path)
         return True
     except Exception as e:
-        logger.error(
-            f'Failed to clear temporary directory: {type(e).__name__} (dir: {temp_dir})'
-        )
+        logger.error(f'Failed to clear temporary directory: {type(e).__name__} (dir: {temp_dir})')
         return False

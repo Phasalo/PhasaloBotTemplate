@@ -1,13 +1,15 @@
-import os
 import logging
 import logging.handlers
+import os
 import sys
 from dataclasses import dataclass
 from pathlib import Path
+
+import colorlog
 from aiogram import Bot
 from aiogram.client.default import DefaultBotProperties
-from dotenv import load_dotenv, find_dotenv
-import colorlog
+from dotenv import find_dotenv, load_dotenv
+
 from config.const import BASE_DIR
 
 load_dotenv(find_dotenv())
@@ -40,16 +42,13 @@ class Config:
 
 def __load_config() -> Config:
     return Config(
-        tg_bot=TgBot(
-            token=os.getenv('BOT_TOKEN'),
-            password=os.getenv('PASSWORD')
-        ),
+        tg_bot=TgBot(token=os.getenv('BOT_TOKEN'), password=os.getenv('PASSWORD')),
         log=LogConfig(
             level=os.getenv('LOG_LEVEL', 'INFO'),
             file_path=os.getenv('LOG_FILE', 'logs/bot.log'),
             max_size=int(os.getenv('LOG_MAX_SIZE', 10)),
-            backup_count=int(os.getenv('LOG_BACKUP_COUNT', 3))
-        )
+            backup_count=int(os.getenv('LOG_BACKUP_COUNT', 3)),
+        ),
     )
 
 
@@ -62,7 +61,7 @@ def setup_logging(cfg: LogConfig):
             'WARNING': 'yellow',
             'ERROR': 'red',
             'CRITICAL': 'bold_red',
-        }
+        },
     )
 
     stdout_handler = colorlog.StreamHandler(stream=sys.stdout)
@@ -76,10 +75,10 @@ def setup_logging(cfg: LogConfig):
                 filename=BASE_DIR / cfg.file_path,
                 maxBytes=cfg.max_size * 1024 * 1024,
                 backupCount=cfg.backup_count,
-                encoding='utf-8'
+                encoding='utf-8',
             ),
-            stdout_handler
-        ]
+            stdout_handler,
+        ],
     )
 
     logging.getLogger('aiogram').setLevel(logging.WARNING)

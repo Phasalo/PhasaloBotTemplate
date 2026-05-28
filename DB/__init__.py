@@ -1,5 +1,5 @@
-from DB.tables.users import UsersTable
 from DB.tables.queries import QueriesTable
+from DB.tables.users import UsersTable
 
 
 def init_database():

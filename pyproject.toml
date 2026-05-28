@@ -14,7 +14,10 @@ select = [
     "RUF", # ruff-specific rules
 ]
 ignore = [
-    "B008", # function calls in default arguments
+    "B008",  # function calls in default arguments
+    "N999",  # DB folder uses uppercase
+    "RUF001", # ambiguous Cyrillic chars in strings
+    "RUF002", # ambiguous Cyrillic chars in docstrings
 ]
 
 [tool.ruff.lint.isort]

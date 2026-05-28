@@ -18,9 +18,8 @@ class BaseTable:
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        """Вызывается при выходе из контекстного менеджера"""
         if self.conn:
-            if exc_type is not None:  # Если произошло исключение
+            if exc_type is not None:
                 self.conn.rollback()
             else:
                 self.conn.commit()
@@ -30,7 +29,7 @@ class BaseTable:
 
     def _log(self, action: str, **kwargs: Any):
         logger.info(
-            'Table=\'%s\', Action=\'%s\', Details: %s',
+            "Table='%s', Action='%s', Details: %s",
             self.__tablename__,
             action,
             ', '.join(f'{k}={v}' for k, v in kwargs.items()),
