@@ -13,6 +13,9 @@ class UserModel:
     registration_date: datetime | None = None
     query_count: int = 0
 
+    def display_name(self) -> str | None:
+        return f'@{self.username}' if self.username else self.first_name
+
     def full_name(self) -> str:
         parts = []
         if self.first_name:

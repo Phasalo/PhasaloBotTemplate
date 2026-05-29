@@ -41,7 +41,7 @@ async def user_query_getter(dialog_manager: DialogManager, **kwargs):
     with QueriesTable() as queries_db, UsersTable() as users_db:
         queries, pagination = queries_db.get_user_queries(user_id, page, QUERIES_PER_PAGE)
         user = users_db.get_user(user_id)
-    username_display = f'@{user.username}' if user and user.username else user.first_name if user else None
+    username_display = user.display_name() if user else None
     return {
         'text': format_list.format_queries_text(
             queries=queries,
