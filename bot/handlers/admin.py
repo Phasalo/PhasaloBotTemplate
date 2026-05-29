@@ -1,11 +1,13 @@
 import logging
 
 from aiogram.types import Message
+from aiogram_dialog import DialogManager, StartMode
 
 import temp
-from bot import pages
 from bot.bot_utils import command_arguments
 from bot.bot_utils.routers import AdminRouter, BaseRouter
+from bot.dialogs import UserQuerySG, UsersSG
+from config.const import QUERIES_PER_PAGE
 from DB.tables.queries import QueriesTable
 from DB.tables.users import UsersTable
 from phrases import PHRASES_RU
@@ -16,8 +18,8 @@ logger = logging.getLogger(__name__)
 
 
 @router.command(('users', 'u'), 'таблица со всеми пользователями')  # /users
-async def _(message: Message):
-    await pages.get_users(message.from_user.id)
+async def _(message: Message, dialog_manager: DialogManager):
+    await dialog_manager.start(UsersSG.list, mode=StartMode.RESET_STACK)
 
 
 @router.command(('commands', 'cmds'), 'список всех доступных команд')  # /commands /cmds
@@ -105,8 +107,13 @@ async def _(message: Message):
 
 @router.command(('user_query', 'uq', 'qu'), 'запросы пользователя по ID', 'user_id')  # /user_query
 @command_arguments.user_id
-async def _(message: Message, user_id: int):
-    await pages.user_query(message.from_user.id, user_id)
+async def _(message: Message, user_id: int, dialog_manager: DialogManager):
+    with QueriesTable() as queries_db:
+        queries, _ = queries_db.get_user_queries(user_id, 1, QUERIES_PER_PAGE)
+    if not queries:
+        await message.answer(PHRASES_RU.error.no_query)
+        return
+    await dialog_manager.start(UserQuerySG.list, data={'user_id': user_id}, mode=StartMode.NEW_STACK)
 
 
 @router.command('test', 'отладка и тестирование функций')  # /test

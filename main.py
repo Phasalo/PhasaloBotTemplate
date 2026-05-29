@@ -21,8 +21,11 @@ import asyncio
 import logging
 
 from aiogram import Dispatcher
+from aiogram.fsm.storage.memory import MemoryStorage
+from aiogram_dialog import setup_dialogs
 
-from bot.handlers import admin_router, callbacks_router, default_router, inline_router
+from bot.dialogs import user_query_dialog, users_dialog
+from bot.handlers import admin_router, default_router, inline_router
 from bot.middlewares import GetUserMiddleware, ShadowBanMiddleware, UserLoggerMiddleware
 from config import bot
 from DB import init_database
@@ -34,13 +37,17 @@ async def main() -> None:
     logger.info('Creating db tables')
     init_database()
 
-    dp = Dispatcher()
+    storage = MemoryStorage()
+
+    dp = Dispatcher(storage=storage)
 
     logger.info('Including routers')
     dp.include_router(admin_router)
-    dp.include_router(callbacks_router)
     dp.include_router(default_router)
     dp.include_router(inline_router)
+    dp.include_router(users_dialog)
+    dp.include_router(user_query_dialog)
+    setup_dialogs(dp)
 
     logger.info('Including middlewares')
     dp.update.middleware(GetUserMiddleware())

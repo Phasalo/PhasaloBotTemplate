@@ -19,8 +19,10 @@ answers:
     - "🤷‍♂️ Не понимаю 🤷‍♀️"
 
 button:
-  next_page: "»"
-  past_page: "«"
+  next_page: "❯"
+  last_page: "»"
+  prev_page: "❮"
+  first_page: "«"
 
 placeholder_appeal: "PhasaloBotTemplate"
 

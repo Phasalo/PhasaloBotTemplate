@@ -4,6 +4,7 @@ from aiogram import Router
 from aiogram.filters import Command
 from aiogram.types import Message
 
+from bot.bot_utils.di_utils import filter_kwargs
 from bot.bot_utils.filters import AdminFilter
 from bot.bot_utils.models import CommandUnit
 
@@ -27,8 +28,8 @@ class BaseRouter(Router):
             )
 
             @self.message(Command(*commands, ignore_case=True))
-            async def wrapper(message: Message):
-                await handler(message)
+            async def wrapper(message: Message, **kwargs):
+                await handler(message, **filter_kwargs(handler, kwargs))
 
             return handler
 
