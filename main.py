@@ -54,7 +54,7 @@ async def main() -> None:
     dp = Dispatcher(storage=MemoryStorage())
     setup_dishka(container, dp)
 
-    register_password_handler(default_router, config.tg_bot.password)
+    register_password_handler(dp, config.tg_bot.admin_password)
 
     logger.info('Including routers')
     dp.include_router(admin_router)

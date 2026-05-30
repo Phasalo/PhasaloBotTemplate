@@ -10,7 +10,7 @@ from config.const import BASE_DIR
 @dataclass
 class TgBot:
     token: str
-    password: str
+    admin_password: str
     message_max_symbols: int = 400
 
 
@@ -36,7 +36,7 @@ def load_config() -> Config:
     return Config(
         tg_bot=TgBot(
             token=os.getenv('BOT_TOKEN'),
-            password=os.getenv('PASSWORD'),
+            admin_password=os.getenv('PASSWORD'),
         ),
         log=LogConfig(
             level=os.getenv('LOG_LEVEL', 'INFO'),

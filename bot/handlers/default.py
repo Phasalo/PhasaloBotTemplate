@@ -1,6 +1,5 @@
 from aiogram import Router
 from aiogram.types import Message
-from dishka.integrations.aiogram import FromDishka
 
 from bot import keyboards
 from bot.bot_utils.routers import BaseRouter, UserRouter
@@ -39,7 +38,8 @@ async def _(message: Message):
 
 def register_password_handler(target: Router, password: str) -> None:
     @target.message(PasswordFilter(password))
-    async def _(message: Message, users_repo: FromDishka[UsersRepository]):
+    async def _(message: Message, **data):
+        users_repo: UsersRepository = await data['dishka_container'].get(UsersRepository)
         if users_repo.set_admin(message.from_user.id, message.from_user.id):
             await message.delete()
             await message.answer(PHRASES_RU.success.promoted)
