@@ -5,7 +5,7 @@ from typing import Any
 from aiogram import BaseMiddleware
 from aiogram.types import TelegramObject, Update
 
-from DB.models import UserModel as UserModel
+from db.models import UserModel
 
 logger = logging.getLogger(__name__)
 

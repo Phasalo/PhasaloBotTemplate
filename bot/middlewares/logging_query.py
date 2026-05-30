@@ -6,9 +6,8 @@ from aiogram import BaseMiddleware
 from aiogram.types import InlineQuery, Message, TelegramObject
 
 from bot.bot_utils.routers import BaseRouter
-from DB.models import QueryModel
-from DB.models import UserModel as UserModel
-from DB.tables.queries import QueriesTable
+from db.models import QueryModel, UserModel
+from db.repositories.queries import QueriesRepository
 
 logger = logging.getLogger(__name__)
 
@@ -42,15 +41,15 @@ class UserLoggerMiddleware(BaseMiddleware):
             logger.warning("Cannot add queries. The 'user_row' key was not found in the middleware data.")
             return await handler(event, data)
 
+        queries_repo: QueriesRepository = await data['dishka_container'].get(QueriesRepository)
+
         # Логируем текстовые сообщения
         if isinstance(event, Message) and event.text:
-            with QueriesTable() as queries_db:
-                queries_db.add_query(QueryModel(user_row.user_id, event.text))
+            queries_repo.add_query(QueryModel(user_row.user_id, event.text))
 
         # Логируем инлайн-запросы
         elif isinstance(event, InlineQuery) and event.query:
-            with QueriesTable() as queries_db:
-                queries_db.add_query(QueryModel(user_row.user_id, f'[INLINE] {event.query}'))
+            queries_repo.add_query(QueryModel(user_row.user_id, f'[INLINE] {event.query}'))
         # phasalo OFF
 
         return await handler(event, data)
