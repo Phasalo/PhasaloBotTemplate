@@ -1,10 +1,11 @@
 from aiogram.fsm.state import State, StatesGroup
 from aiogram_dialog import Dialog, DialogManager, Window
 from aiogram_dialog.widgets.text import Format
+from dishka.integrations.aiogram_dialog import FromDishka
 
 from config.const import QUERIES_PER_PAGE, USERS_PER_PAGE
-from DB.tables.queries import QueriesTable
-from DB.tables.users import UsersTable
+from db.repositories.queries import QueriesRepository
+from db.repositories.users import UsersRepository
 from phrases import PHRASES_RU
 from utils import format_list
 
@@ -19,10 +20,9 @@ class UserQuerySG(StatesGroup):
     list = State()
 
 
-async def users_getter(dialog_manager: DialogManager, **kwargs):
+async def users_getter(dialog_manager: DialogManager, users_repo: FromDishka[UsersRepository], **kwargs):
     page = await current_page(dialog_manager)
-    with UsersTable() as db:
-        users, pagination = db.get_all_users(page, USERS_PER_PAGE)
+    users, pagination = users_repo.get_all_users(page, USERS_PER_PAGE)
     return {
         'text': format_list.format_user_list(users, pagination),
         **build_pagination_data(
@@ -34,13 +34,17 @@ async def users_getter(dialog_manager: DialogManager, **kwargs):
     }
 
 
-async def user_query_getter(dialog_manager: DialogManager, **kwargs):
+async def user_query_getter(
+    dialog_manager: DialogManager,
+    users_repo: FromDishka[UsersRepository],
+    queries_repo: FromDishka[QueriesRepository],
+    **kwargs,
+):
     page = await current_page(dialog_manager)
     start_data: dict = dialog_manager.start_data  # type: ignore[assignment]
     user_id = int(start_data['user_id'])
-    with QueriesTable() as queries_db, UsersTable() as users_db:
-        queries, pagination = queries_db.get_user_queries(user_id, page, QUERIES_PER_PAGE)
-        user = users_db.get_user(user_id)
+    queries, pagination = queries_repo.get_user_queries(user_id, page, QUERIES_PER_PAGE)
+    user = users_repo.get_user(user_id)
     username_display = user.display_name() if user else None
     return {
         'text': format_list.format_queries_text(

@@ -1,11 +1,12 @@
-from aiogram import F
+from aiogram import Router
 from aiogram.types import Message
+from dishka.integrations.aiogram import FromDishka
 
 from bot import keyboards
 from bot.bot_utils.routers import BaseRouter, UserRouter
+from bot.filters.password import PasswordFilter
 from bot.handlers.admin import command_getcmds
-from config import config
-from DB.tables.users import UsersTable
+from db.repositories.users import UsersRepository
 from phrases import PHRASES_RU
 
 router = UserRouter()
@@ -36,10 +37,10 @@ async def _(message: Message):
     await message.answer(PHRASES_RU.title.commands + commands_text)
 
 
-@router.message(F.text == config.tg_bot.password)
-async def _(message: Message):
-    with UsersTable() as users_db:
-        if users_db.set_admin(message.from_user.id, message.from_user.id):
+def register_password_handler(target: Router, password: str) -> None:
+    @target.message(PasswordFilter(password))
+    async def _(message: Message, users_repo: FromDishka[UsersRepository]):
+        if users_repo.set_admin(message.from_user.id, message.from_user.id):
             await message.delete()
             await message.answer(PHRASES_RU.success.promoted)
             await command_getcmds(message)

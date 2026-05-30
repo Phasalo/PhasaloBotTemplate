@@ -1,4 +1,4 @@
-from DB.models import Pagination, QueryModel, UserModel
+from db.models import Pagination, QueryModel, UserModel
 from phrases import PHRASES_RU
 from utils import format_string
 
