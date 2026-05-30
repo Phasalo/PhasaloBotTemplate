@@ -1,8 +1,9 @@
 import sqlite3
-from datetime import datetime, timedelta
+from datetime import UTC, datetime
 
-from DB.models import Pagination, UserModel
-from DB.tables.base import BaseTable
+from db.models import Pagination, UserModel
+from db.tables.base import BaseTable
+from db.utils import MSK
 
 
 class UsersTable(BaseTable):
@@ -70,7 +71,7 @@ class UsersTable(BaseTable):
                 is_admin=bool(row['is_admin']),
                 is_banned=bool(row['is_banned']),
                 registration_date=(
-                    datetime.fromisoformat(row['registration_date']) + timedelta(hours=3)
+                    datetime.fromisoformat(row['registration_date']).replace(tzinfo=UTC).astimezone(MSK)
                     if row['registration_date']
                     else None
                 ),
@@ -130,7 +131,7 @@ class UsersTable(BaseTable):
                 is_admin=bool(row['is_admin']),
                 is_banned=bool(row['is_banned']),
                 registration_date=(
-                    datetime.fromisoformat(row['registration_date']) + timedelta(hours=3)
+                    datetime.fromisoformat(row['registration_date']).replace(tzinfo=UTC).astimezone(MSK)
                     if row['registration_date']
                     else None
                 ),
@@ -159,7 +160,7 @@ class UsersTable(BaseTable):
                 is_admin=True,
                 is_banned=bool(row['is_banned']),
                 registration_date=(
-                    datetime.fromisoformat(row['registration_date']) + timedelta(hours=3)
+                    datetime.fromisoformat(row['registration_date']).replace(tzinfo=UTC).astimezone(MSK)
                     if row['registration_date']
                     else None
                 ),

@@ -1,7 +1,8 @@
-from datetime import datetime, timedelta
+from datetime import UTC, datetime
 
-from DB.models import Pagination, QueryModel, UserModel
-from DB.tables.base import BaseTable
+from db.models import Pagination, QueryModel, UserModel
+from db.tables.base import BaseTable
+from db.utils import MSK
 from utils.format_string import clear_string
 
 
@@ -62,7 +63,9 @@ class QueriesTable(BaseTable):
                 user_id=row['user_id'],
                 query_text=row['query_text'],
                 query_date=(
-                    datetime.fromisoformat(row['query_date']) + timedelta(hours=3) if row['query_date'] else None
+                    datetime.fromisoformat(row['query_date']).replace(tzinfo=UTC).astimezone(MSK)
+                    if row['query_date']
+                    else None
                 ),
                 user=user,
             )
@@ -91,7 +94,9 @@ class QueriesTable(BaseTable):
                 user_id=row['user_id'],
                 query_text=row['query_text'],
                 query_date=(
-                    datetime.fromisoformat(row['query_date']) + timedelta(hours=3) if row['query_date'] else None
+                    datetime.fromisoformat(row['query_date']).replace(tzinfo=UTC).astimezone(MSK)
+                    if row['query_date']
+                    else None
                 ),
                 user=UserModel(
                     user_id=row['user_id'],
@@ -132,7 +137,9 @@ class QueriesTable(BaseTable):
                 user_id=row['user_id'],
                 query_text=row['query_text'],
                 query_date=(
-                    datetime.fromisoformat(row['query_date']) + timedelta(hours=3) if row['query_date'] else None
+                    datetime.fromisoformat(row['query_date']).replace(tzinfo=UTC).astimezone(MSK)
+                    if row['query_date']
+                    else None
                 ),
                 user=UserModel(
                     user_id=row['user_id'],
