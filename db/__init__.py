@@ -1,9 +1,7 @@
 from pathlib import Path
 
-from db.repositories.queries import QueriesRepository
-from db.repositories.users import UsersRepository
-from db.tables.queries import QueriesTable
-from db.tables.users import UsersTable
+from db.repositories import QueriesRepository, UsersRepository
+from db.tables import QueriesTable, UsersTable
 
 __all__ = [
     'QueriesRepository',
