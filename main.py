@@ -19,27 +19,42 @@
 
 import asyncio
 import logging
+from pathlib import Path
 
-from aiogram import Dispatcher
+from aiogram import Bot, Dispatcher
+from aiogram.client.default import DefaultBotProperties
 from aiogram.fsm.storage.memory import MemoryStorage
 from aiogram_dialog import setup_dialogs
+from dishka.integrations.aiogram import setup_dishka
 
 from bot.dialogs import user_query_dialog, users_dialog
 from bot.handlers import admin_router, default_router, inline_router
+from bot.handlers.default import register_password_handler
 from bot.middlewares import GetUserMiddleware, ShadowBanMiddleware, UserLoggerMiddleware
-from config import bot
-from DB import init_database
+from config import load_config
+from config.const import BASE_DIR
+from config.logging import setup_logging
+from container import build_container
+from db import init_database
 
 logger = logging.getLogger(__name__)
 
 
 async def main() -> None:
+    config = load_config()
+    Path(BASE_DIR / 'logs').mkdir(exist_ok=True)
+    setup_logging(config.log)
+
     logger.info('Creating db tables')
-    init_database()
+    init_database(config.db_path)
 
-    storage = MemoryStorage()
+    bot = Bot(token=config.tg_bot.token, default=DefaultBotProperties(parse_mode='HTML'))
+    container = build_container(config)
 
-    dp = Dispatcher(storage=storage)
+    dp = Dispatcher(storage=MemoryStorage())
+    setup_dishka(container, dp)
+
+    register_password_handler(default_router, config.tg_bot.password)
 
     logger.info('Including routers')
     dp.include_router(admin_router)
@@ -55,9 +70,8 @@ async def main() -> None:
     dp.message.middleware.register(UserLoggerMiddleware())
     dp.inline_query.middleware.register(UserLoggerMiddleware())
 
-    logger.info(
-        f'{(await bot.get_me()).first_name} starting\n * Running on http://t.me/{(await bot.get_me()).username}'
-    )
+    me = await bot.get_me()
+    logger.info(f'{me.first_name} starting\n * Running on http://t.me/{me.username}')
     try:
         await dp.start_polling(bot)
     except Exception as e:

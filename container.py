@@ -1,4 +1,4 @@
-from dishka import Provider, Scope, make_container, provide
+from dishka import Provider, Scope, make_async_container, provide
 
 from config.settings import Config
 from db.repositories.queries import QueriesRepository
@@ -26,4 +26,4 @@ class AppProvider(Provider):
 
 
 def build_container(config: Config):
-    return make_container(AppProvider(config))
+    return make_async_container(AppProvider(config))
