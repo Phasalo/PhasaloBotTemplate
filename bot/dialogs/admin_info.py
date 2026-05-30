@@ -1,7 +1,6 @@
 from aiogram.fsm.state import State, StatesGroup
 from aiogram_dialog import Dialog, DialogManager, Window
 from aiogram_dialog.widgets.text import Format
-from dishka.integrations.aiogram_dialog import FromDishka
 
 from config.const import QUERIES_PER_PAGE, USERS_PER_PAGE
 from db.repositories.queries import QueriesRepository
@@ -20,7 +19,9 @@ class UserQuerySG(StatesGroup):
     list = State()
 
 
-async def users_getter(dialog_manager: DialogManager, users_repo: FromDishka[UsersRepository], **kwargs):
+async def users_getter(dialog_manager: DialogManager, **kwargs):
+    container = kwargs['dishka_container']
+    users_repo: UsersRepository = await container.get(UsersRepository)
     page = await current_page(dialog_manager)
     users, pagination = users_repo.get_all_users(page, USERS_PER_PAGE)
     return {
@@ -34,12 +35,10 @@ async def users_getter(dialog_manager: DialogManager, users_repo: FromDishka[Use
     }
 
 
-async def user_query_getter(
-    dialog_manager: DialogManager,
-    users_repo: FromDishka[UsersRepository],
-    queries_repo: FromDishka[QueriesRepository],
-    **kwargs,
-):
+async def user_query_getter(dialog_manager: DialogManager, **kwargs):
+    container = kwargs['dishka_container']
+    users_repo: UsersRepository = await container.get(UsersRepository)
+    queries_repo: QueriesRepository = await container.get(QueriesRepository)
     page = await current_page(dialog_manager)
     start_data: dict = dialog_manager.start_data  # type: ignore[assignment]
     user_id = int(start_data['user_id'])

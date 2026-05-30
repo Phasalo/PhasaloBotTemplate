@@ -2,7 +2,6 @@ import logging
 
 from aiogram.types import Message
 from aiogram_dialog import DialogManager, StartMode
-from dishka.integrations.aiogram import FromDishka
 
 import temp
 from bot.bot_utils import command_arguments
@@ -37,7 +36,7 @@ async def command_getcmds(message: Message):
 
 @router.command('ban', 'заблокировать пользователя по ID', 'user_id')  # /ban
 @command_arguments.user_id
-async def _(message: Message, user_id, users_repo: FromDishka[UsersRepository]):
+async def _(message: Message, user_id, users_repo: UsersRepository):
     if message.from_user.id == int(user_id):
         await message.answer(PHRASES_RU.error.ban_yourself)
         return
@@ -49,7 +48,7 @@ async def _(message: Message, user_id, users_repo: FromDishka[UsersRepository]):
 
 @router.command('unban', 'разблокировать пользователя по ID', 'user_id')  # /unban
 @command_arguments.user_id
-async def _(message: Message, user_id, users_repo: FromDishka[UsersRepository]):
+async def _(message: Message, user_id, users_repo: UsersRepository):
     if users_repo.set_ban_status(user_id, message.from_user.id, False):
         await message.answer(PHRASES_RU.replace('success.unbanned', user_id=user_id))
     else:
@@ -58,7 +57,7 @@ async def _(message: Message, user_id, users_repo: FromDishka[UsersRepository]):
 
 @router.command('promote', 'повысить уровень доступа', 'user_id')  # /promote
 @command_arguments.user_id
-async def _(message: Message, user_id, users_repo: FromDishka[UsersRepository]):
+async def _(message: Message, user_id, users_repo: UsersRepository):
     if users_repo.set_admin(user_id, message.from_user.id, True):
         await message.answer(PHRASES_RU.replace('success.promoted_by', user_id=user_id))
     else:
@@ -67,7 +66,7 @@ async def _(message: Message, user_id, users_repo: FromDishka[UsersRepository]):
 
 @router.command('demote', 'понизить уровень доступа', 'user_id')  # /demote
 @command_arguments.user_id
-async def _(message: Message, user_id, users_repo: FromDishka[UsersRepository]):
+async def _(message: Message, user_id, users_repo: UsersRepository):
     if users_repo.set_admin(user_id, message.from_user.id, False):
         await message.answer(PHRASES_RU.replace('success.demoted', user_id=user_id))
     else:
@@ -76,7 +75,7 @@ async def _(message: Message, user_id, users_repo: FromDishka[UsersRepository]):
 
 @router.command(('query', 'q'), 'последние N запросов', 'N')  # /query
 @command_arguments.digit(default=5)
-async def _(message: Message, amount: int, queries_repo: FromDishka[QueriesRepository]):
+async def _(message: Message, amount: int, queries_repo: QueriesRepository):
     queries = queries_repo.get_last_queries(int(amount))
     if not queries:
         await message.answer(PHRASES_RU.info.no_query)
@@ -103,7 +102,8 @@ async def _(message: Message):
 
 @router.command(('user_query', 'uq', 'qu'), 'запросы пользователя по ID', 'user_id')  # /user_query
 @command_arguments.user_id
-async def _(message: Message, user_id: int, dialog_manager: DialogManager, queries_repo: FromDishka[QueriesRepository]):
+async def _(message: Message, user_id: int, dialog_manager: DialogManager, **kwargs):
+    queries_repo: QueriesRepository = await kwargs['dishka_container'].get(QueriesRepository)
     queries, _ = queries_repo.get_user_queries(user_id, 1, QUERIES_PER_PAGE)
     if not queries:
         await message.answer(PHRASES_RU.error.no_query)

@@ -44,6 +44,7 @@ def user_id(func):
         if not users_repo.is_exists(_user_id):
             await message.answer(PHRASES_RU.replace('error.user_not_exist', user_id=_user_id))
             return
+        kwargs['users_repo'] = users_repo
         await func(message, _user_id, **filter_kwargs(func, kwargs))
 
     return wrapper
