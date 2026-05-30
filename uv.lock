@@ -158,6 +158,15 @@ wheels = [
 ]
 
 [[package]]
+name = "dishka"
+version = "1.10.1"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/97/da/b75b5fe665d16725e1d46e291c8dd4b0ed1731c7964f41087fda92f03d40/dishka-1.10.1.tar.gz", hash = "sha256:51fb624b9acc948b90f57128460061d1f3a1780121fe1c7d14c565e8bbff2083", size = 282008, upload-time = "2026-04-25T12:07:57.587Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/2c/08/dd3259a319ba45c48d975caf237c830c7873a203288cb4ab186cc5bef585/dishka-1.10.1-py3-none-any.whl", hash = "sha256:84f40c1115eb391ce3fb558fd7946c5bcaf6361c35b77b7a185b7697a5720ec7", size = 120062, upload-time = "2026-04-25T12:07:59.153Z" },
+]
+
+[[package]]
 name = "frozenlist"
 version = "1.8.0"
 source = { registry = "https://pypi.org/simple" }
@@ -484,7 +493,7 @@ wheels = [
 ]
 
 [[package]]
-name = "phasalo-bot"
+name = "phasalo-template-bot"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
@@ -493,6 +502,7 @@ dependencies = [
     { name = "aiogram-dialog" },
     { name = "aiohttp" },
     { name = "colorlog" },
+    { name = "dishka" },
     { name = "pydantic" },
     { name = "python-dotenv" },
     { name = "pyyaml" },
@@ -505,6 +515,7 @@ requires-dist = [
     { name = "aiogram-dialog", specifier = "==2.6.0" },
     { name = "aiohttp", specifier = "==3.9.5" },
     { name = "colorlog", specifier = "==6.9.0" },
+    { name = "dishka", specifier = ">=1.10.1" },
     { name = "pydantic", specifier = "==2.5.3" },
     { name = "python-dotenv", specifier = "==1.1.1" },
     { name = "pyyaml", specifier = "==6.0.2" },
