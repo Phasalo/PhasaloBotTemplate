@@ -23,6 +23,7 @@ from pathlib import Path
 
 from aiogram import Bot, Dispatcher
 from aiogram.client.default import DefaultBotProperties
+from aiogram.client.session.aiohttp import AiohttpSession
 from aiogram.fsm.storage.memory import MemoryStorage
 from aiogram_dialog import setup_dialogs
 from dishka.integrations.aiogram import setup_dishka
@@ -48,7 +49,19 @@ async def main() -> None:
     logger.info('Creating db tables')
     init_database(config.db_path)
 
-    bot = Bot(token=config.tg_bot.token, default=DefaultBotProperties(parse_mode='HTML'))
+    session_kwargs = {}
+    if config.tg_bot.proxy_url:
+        session_kwargs['proxy'] = config.tg_bot.proxy_url
+        logger.info(f'Proxy configured: {config.tg_bot.proxy_url}')
+    else:
+        logger.info('No proxy configured, connecting directly')
+
+    session = AiohttpSession(**session_kwargs)
+    bot = Bot(
+        token=config.tg_bot.token,
+        session=session,
+        default=DefaultBotProperties(parse_mode='HTML'),
+    )
     container = build_container(config)
 
     dp = Dispatcher(storage=MemoryStorage())

@@ -11,6 +11,7 @@ from config.const import BASE_DIR
 class TgBot:
     token: str
     admin_password: str
+    proxy_url: str | None = None
     message_max_symbols: int = 400
 
 
@@ -37,6 +38,7 @@ def load_config() -> Config:
         tg_bot=TgBot(
             token=os.getenv('BOT_TOKEN'),
             admin_password=os.getenv('PASSWORD'),
+            proxy_url=os.getenv('PROXY_URL') or None,
         ),
         log=LogConfig(
             level=os.getenv('LOG_LEVEL', 'INFO'),
