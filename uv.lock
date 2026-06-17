@@ -43,6 +43,19 @@ wheels = [
 ]
 
 [[package]]
+name = "aiogram3-metrics"
+version = "0.1.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "aiogram" },
+    { name = "prometheus-client" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/8d/ce/a71f2a6c752c499edc2c7f74153c6241d5e71b523d9c6d18254e1f443121/aiogram3_metrics-0.1.1.tar.gz", hash = "sha256:68ff7fd911aafecfa69654ef7eda8e27faa238c397efaa75c5a6892c90e328a0", size = 71461, upload-time = "2026-06-16T23:25:58.77Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/92/eb/f6b5895cfc225d6e9525659ca483995b97c4f8d33f0a1317a35cdd962eb6/aiogram3_metrics-0.1.1-py3-none-any.whl", hash = "sha256:99a76b868e3068deedb458b3ac1a1ff62447eae91f8af36de259365d6b627476", size = 4276, upload-time = "2026-06-16T23:25:57.942Z" },
+]
+
+[[package]]
 name = "aiohttp"
 version = "3.9.5"
 source = { registry = "https://pypi.org/simple" }
@@ -513,6 +526,7 @@ dependencies = [
     { name = "aiofiles" },
     { name = "aiogram" },
     { name = "aiogram-dialog" },
+    { name = "aiogram3-metrics" },
     { name = "aiohttp" },
     { name = "aiohttp-socks" },
     { name = "colorlog" },
@@ -532,6 +546,7 @@ requires-dist = [
     { name = "aiofiles", specifier = "==23.2.1" },
     { name = "aiogram", specifier = ">=3.28.0" },
     { name = "aiogram-dialog", specifier = "==2.6.0" },
+    { name = "aiogram3-metrics", specifier = ">=0.1.1" },
     { name = "aiohttp", specifier = "==3.9.5" },
     { name = "aiohttp-socks", specifier = ">=0.8.4" },
     { name = "colorlog", specifier = "==6.9.0" },
@@ -542,6 +557,15 @@ requires-dist = [
     { name = "ruff", marker = "extra == 'dev'" },
 ]
 provides-extras = ["dev"]
+
+[[package]]
+name = "prometheus-client"
+version = "0.25.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/1b/fb/d9aa83ffe43ce1f19e557c0971d04b90561b0cfd50762aafb01968285553/prometheus_client-0.25.0.tar.gz", hash = "sha256:5e373b75c31afb3c86f1a52fa1ad470c9aace18082d39ec0d2f918d11cc9ba28", size = 86035, upload-time = "2026-04-09T19:53:42.359Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/8d/9b/d4b1e644385499c8346fa9b622a3f030dce14cd6ef8a1871c221a17a67e7/prometheus_client-0.25.0-py3-none-any.whl", hash = "sha256:d5aec89e349a6ec230805d0df882f3807f74fd6c1a2fa86864e3c2279059fed1", size = 64154, upload-time = "2026-04-09T19:53:41.324Z" },
+]
 
 [[package]]
 name = "propcache"

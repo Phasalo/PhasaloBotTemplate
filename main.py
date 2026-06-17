@@ -56,7 +56,19 @@ async def main() -> None:
     else:
         logger.info('No proxy configured, connecting directly')
 
-    session = AiohttpSession(**session_kwargs)
+    bot_name = config.tg_bot.bot_name
+    metrics_port = config.tg_bot.metrics_port
+    if bot_name and metrics_port:
+        from aiogram_metrics import InstrumentedAiohttpSession, MetricsMiddleware, start_metrics_server
+
+        start_metrics_server(port=metrics_port)
+        session = InstrumentedAiohttpSession(bot_name=bot_name, **session_kwargs)
+        metrics_middleware = MetricsMiddleware(bot_name=bot_name)
+    else:
+        session = AiohttpSession(**session_kwargs)
+        metrics_middleware = None
+        logger.info('Metrics disabled (set BOT_NAME and METRICS_PORT to enable)')
+
     bot = Bot(
         token=config.tg_bot.token,
         session=session,
@@ -65,6 +77,8 @@ async def main() -> None:
     container = build_container(config)
 
     dp = Dispatcher(storage=MemoryStorage())
+    if metrics_middleware:
+        dp.update.outer_middleware(metrics_middleware)
     setup_dishka(container, dp)
 
     register_password_handler(dp, config.tg_bot.admin_password)
